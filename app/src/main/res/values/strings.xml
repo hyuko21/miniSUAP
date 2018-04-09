@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">mini SUAP</string>
+    <string name="title_home">Início</string>
+    <string name="title_news">Notícias</string>
+    <string name="title_about">Sobre</string>
+    <string name="description_about">
+        \t\tO \"mini SUAP\" é uma versão minimalísta do Sistema Unificado de Administração Pública (SUAP).
+        Tem por objetivo buscar informações básicas relacionadas a um aluno, a partir da sua matrícula e senha.
+    </string>
+    <string name="footer_title">made with ♥ by Victor Wagner</string>
+
+    <string name="btn_enter">Entrar</string>
+    <string name="hint_password">Senha</string>
+    <string name="hint_registration">Matrícula</string>
+</resources>
