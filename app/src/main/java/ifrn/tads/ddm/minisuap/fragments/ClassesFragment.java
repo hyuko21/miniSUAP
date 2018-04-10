@@ -8,16 +8,10 @@ import android.view.ViewGroup;
 
 import ifrn.tads.ddm.minisuap.R;
 
-public class NewsFragment extends Fragment {
+public class ClassesFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_news, container, false);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
+        return inflater.inflate(R.layout.activity_classes, container, false);
     }
 }

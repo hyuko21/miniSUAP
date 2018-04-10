@@ -1,10 +1,11 @@
 package ifrn.tads.ddm.minisuap.models;
 
-public class Student {
+import com.orm.SugarRecord;
+
+public class Student extends SugarRecord {
     
     private String matricula;
     private String nome;
-    private String email;
     private String curso;
     private String campus;
     private String situacao;
@@ -12,7 +13,6 @@ public class Student {
     public Student(String matricula, String nome, String email, String curso, String campus, String situacao) {
         this.matricula = matricula;
         this.nome = nome;
-        this.email = email;
         this.curso = curso;
         this.campus = campus;
         this.situacao = situacao;
@@ -34,14 +34,6 @@ public class Student {
         this.nome = nome;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getCurso() {
         return curso;
     }
@@ -58,11 +50,11 @@ public class Student {
         this.campus = campus;
     }
 
-    public String getsituacao() {
+    public String getSituacao() {
         return situacao;
     }
 
-    public void setsituacao(String situacao) {
+    public void setSituacao(String situacao) {
         this.situacao = situacao;
     }
 }

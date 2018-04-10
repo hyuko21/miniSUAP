@@ -29,6 +29,7 @@
                 android:id="@+id/registration_input"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
                 android:hint="@string/hint_registration"
                 android:ems="21"
                 android:layout_gravity="center"/>
@@ -43,6 +44,7 @@
                 android:id="@+id/password_input"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:inputType="textPassword"
                 android:hint="@string/hint_password"
                 android:ems="21"
                 android:layout_gravity="center"/>
@@ -54,7 +56,8 @@
             android:layout_height="wrap_content"
             android:text="@string/btn_enter"
             android:ems="21"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true"
+            android:onClick="entrar"/>
 
     </RelativeLayout>
 

@@ -3,6 +3,10 @@
     <string name="title_home">Início</string>
     <string name="title_news">Notícias</string>
     <string name="title_about">Sobre</string>
+    <string name="title_profile">Perfil</string>
+    <string name="title_classes">Turmas</string>
+    <string name="title_contacts">Contatos</string>
+
     <string name="description_about">
         \t\tO \"mini SUAP\" é uma versão minimalísta do Sistema Unificado de Administração Pública (SUAP).
         Tem por objetivo buscar informações básicas relacionadas a um aluno, a partir da sua matrícula e senha.
@@ -12,4 +16,10 @@
     <string name="btn_enter">Entrar</string>
     <string name="hint_password">Senha</string>
     <string name="hint_registration">Matrícula</string>
+
+    <string name="student_registration">Matrícula</string>
+    <string name="student_name">Nome</string>
+    <string name="student_course">Curso</string>
+    <string name="student_campus">Campus</string>
+    <string name="studant_status">Situação</string>
 </resources>

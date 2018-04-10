@@ -1,18 +1,42 @@
 package ifrn.tads.ddm.minisuap;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Base64;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import ifrn.tads.ddm.minisuap.fragments.AboutFragment;
+import ifrn.tads.ddm.minisuap.fragments.ClassesFragment;
+import ifrn.tads.ddm.minisuap.fragments.ContactsFragment;
 import ifrn.tads.ddm.minisuap.fragments.HomeFragment;
 import ifrn.tads.ddm.minisuap.fragments.NewsFragment;
+import ifrn.tads.ddm.minisuap.fragments.ProfileFragment;
+import ifrn.tads.ddm.minisuap.models.Student;
 
 public class MainActivity extends FragmentActivity {
+
+    private Student student;
+
+    private EditText registration_input, password_input;
+    private BottomNavigationView navigation;
+    private BottomNavigationView inner_navigation;
 
     private FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -40,6 +64,30 @@ public class MainActivity extends FragmentActivity {
         }
     };
 
+    private BottomNavigationView.OnNavigationItemSelectedListener innerMOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            int menuItemId = item.getItemId();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+            if (menuItemId == R.id.navigation_profile) {
+                ProfileFragment profileFragment = new ProfileFragment();
+                fragmentTransaction.replace(R.id.fragment_layout, profileFragment, "profile");
+            } else if (menuItemId == R.id.navigation_classes) {
+                ClassesFragment classesFragment = new ClassesFragment();
+                fragmentTransaction.replace(R.id.fragment_layout, classesFragment, "classes");
+            } else if (menuItemId == R.id.navigation_contacts) {
+                ContactsFragment contactsFragment = new ContactsFragment();
+                fragmentTransaction.replace(R.id.fragment_layout, contactsFragment, "contacts");
+            }
+
+            fragmentTransaction.commit();
+            return true;
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,8 +101,88 @@ public class MainActivity extends FragmentActivity {
         }
 
 
-        BottomNavigationView navigation = findViewById(R.id.navigation);
+        navigation = findViewById(R.id.navigation);
+        inner_navigation = findViewById(R.id.inner_navigation);
+
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        inner_navigation.setOnNavigationItemSelectedListener(innerMOnNavigationItemSelectedListener);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        registration_input = findViewById(R.id.registration_input);
+        password_input = findViewById(R.id.password_input);
+    }
+
+    public void entrar(View view) {
+        String registration = registration_input.getText().toString();
+        String password = password_input.getText().toString();
+
+        if (registration.isEmpty()) {
+            registration_input.setError("Campo matrícula obrigatório");
+            return;
+        } else if (password.isEmpty()) {
+            password_input.setError("Campo senha obrigatório");
+            return;
+        }
+
+        String url = "https://suap.ifrn.edu.br/api/v2/edu/alunos/" + registration + "/";
+        new AuthenticateSUAP().execute("GET", url, registration, password);
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    private class AuthenticateSUAP extends AsyncTask<String, Void, Student> {
+
+        @Override
+        protected Student doInBackground(String... params) {
+
+            String credentials, encodedCredentials, basicAuth;
+            String registration, password;
+            String method;
+            URL url;
+            HttpURLConnection httpURLConnection;
+
+            try {
+                method = params[0];
+                url = new URL(params[1]);
+                registration = params[2];
+                password = params[3];
+
+                credentials = registration + ":" + password;
+                encodedCredentials = Base64.encodeToString(credentials.getBytes(), 0);
+                basicAuth = "Basic " + encodedCredentials;
+
+                httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestProperty("Authorization", basicAuth);
+                httpURLConnection.setRequestMethod(method);
+                httpURLConnection.connect();
+
+                int response = httpURLConnection.getResponseCode();
+                if (response == HttpURLConnection.HTTP_OK) {
+                    Reader reader = new InputStreamReader(httpURLConnection.getInputStream());
+                    student = new Gson().fromJson(reader, Student.class);
+                }
+            } catch (MalformedURLException ex) {
+                ex.printStackTrace();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            return student;
+        }
+
+        @Override
+        protected void onPostExecute(Student student) {
+            if (student != null) {
+                navigation.setVisibility(View.GONE);
+                inner_navigation.setVisibility(View.VISIBLE);
+                inner_navigation.setSelectedItemId(R.id.navigation_profile);
+            } else {
+                Toast.makeText(MainActivity.this, "Matrícula ou senha inválida.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 }
