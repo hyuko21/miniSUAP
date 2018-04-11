@@ -26,7 +26,6 @@ import ifrn.tads.ddm.minisuap.fragments.AboutFragment;
 import ifrn.tads.ddm.minisuap.fragments.ClassesFragment;
 import ifrn.tads.ddm.minisuap.fragments.ContactsFragment;
 import ifrn.tads.ddm.minisuap.fragments.HomeFragment;
-import ifrn.tads.ddm.minisuap.fragments.NewsFragment;
 import ifrn.tads.ddm.minisuap.fragments.ProfileFragment;
 import ifrn.tads.ddm.minisuap.models.Student;
 
@@ -51,9 +50,6 @@ public class MainActivity extends FragmentActivity {
             if (menuItemId == R.id.navigation_home) {
                 HomeFragment homeFragment = new HomeFragment();
                 fragmentTransaction.replace(R.id.fragment_layout, homeFragment, "home");
-            } else if (menuItemId == R.id.navigation_news) {
-                NewsFragment newsFragment = new NewsFragment();
-                fragmentTransaction.replace(R.id.fragment_layout, newsFragment, "news");
             } else if (menuItemId == R.id.navigation_about) {
                 AboutFragment aboutFragment = new AboutFragment();
                 fragmentTransaction.replace(R.id.fragment_layout, aboutFragment, "about");
@@ -74,6 +70,15 @@ public class MainActivity extends FragmentActivity {
 
             if (menuItemId == R.id.navigation_profile) {
                 ProfileFragment profileFragment = new ProfileFragment();
+
+                Bundle outState = new Bundle();
+                outState.putString("registration", student.getMatricula());
+                outState.putString("name", student.getNome());
+                outState.putString("course", student.getCurso());
+                outState.putString("campus", student.getCampus());
+                outState.putString("status", student.getSituacao());
+                profileFragment.setArguments(outState);
+
                 fragmentTransaction.replace(R.id.fragment_layout, profileFragment, "profile");
             } else if (menuItemId == R.id.navigation_classes) {
                 ClassesFragment classesFragment = new ClassesFragment();
@@ -100,7 +105,6 @@ public class MainActivity extends FragmentActivity {
             fragmentTransaction.commit();
         }
 
-
         navigation = findViewById(R.id.navigation);
         inner_navigation = findViewById(R.id.inner_navigation);
 
@@ -115,7 +119,7 @@ public class MainActivity extends FragmentActivity {
         password_input = findViewById(R.id.password_input);
     }
 
-    public void entrar(View view) {
+    public void enter(View view) {
         String registration = registration_input.getText().toString();
         String password = password_input.getText().toString();
 
@@ -131,8 +135,12 @@ public class MainActivity extends FragmentActivity {
         new AuthenticateSUAP().execute("GET", url, registration, password);
     }
 
-    public Student getStudent() {
-        return student;
+    public void leave(View view) {
+        recreate();
+        student = null;
+        inner_navigation.setVisibility(View.GONE);
+        navigation.setVisibility(View.VISIBLE);
+        navigation.setSelectedItemId(R.id.navigation_home);
     }
 
     private class AuthenticateSUAP extends AsyncTask<String, Void, Student> {

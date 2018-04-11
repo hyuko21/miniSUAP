@@ -10,7 +10,7 @@ public class Student extends SugarRecord {
     private String campus;
     private String situacao;
 
-    public Student(String matricula, String nome, String email, String curso, String campus, String situacao) {
+    public Student(String matricula, String nome, String curso, String campus, String situacao) {
         this.matricula = matricula;
         this.nome = nome;
         this.curso = curso;

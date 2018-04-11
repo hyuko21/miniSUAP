@@ -15,4 +15,12 @@
         android:text="@string/title_classes"
         style="@style/TextAppearance.AppCompat.Display2" />
 
+    <ListView
+        android:id="@+id/classes_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/activity_vertical_margin">
+
+    </ListView>
+
 </TableLayout>
