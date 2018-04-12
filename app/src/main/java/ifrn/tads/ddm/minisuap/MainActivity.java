@@ -32,6 +32,8 @@ import ifrn.tads.ddm.minisuap.models.Student;
 public class MainActivity extends FragmentActivity {
 
     private Student student;
+    private String registration, password;
+    private boolean authenticated;
 
     private EditText registration_input, password_input;
     private BottomNavigationView navigation;
@@ -82,6 +84,12 @@ public class MainActivity extends FragmentActivity {
                 fragmentTransaction.replace(R.id.fragment_layout, profileFragment, "profile");
             } else if (menuItemId == R.id.navigation_classes) {
                 ClassesFragment classesFragment = new ClassesFragment();
+
+                Bundle outState = new Bundle();
+                outState.putString("registration", registration);
+                outState.putString("password", password);
+                classesFragment.setArguments(outState);
+
                 fragmentTransaction.replace(R.id.fragment_layout, classesFragment, "classes");
             } else if (menuItemId == R.id.navigation_contacts) {
                 ContactsFragment contactsFragment = new ContactsFragment();
@@ -119,9 +127,25 @@ public class MainActivity extends FragmentActivity {
         password_input = findViewById(R.id.password_input);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean("authenticated", authenticated);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        if (savedInstanceState.getBoolean("authenticated")) {
+            navigation.setVisibility(View.GONE);
+            inner_navigation.setVisibility(View.VISIBLE);
+        }
+    }
+
     public void enter(View view) {
-        String registration = registration_input.getText().toString();
-        String password = password_input.getText().toString();
+        registration = registration_input.getText().toString();
+        password = password_input.getText().toString();
 
         if (registration.isEmpty()) {
             registration_input.setError("Campo matrícula obrigatório");
@@ -141,6 +165,7 @@ public class MainActivity extends FragmentActivity {
         inner_navigation.setVisibility(View.GONE);
         navigation.setVisibility(View.VISIBLE);
         navigation.setSelectedItemId(R.id.navigation_home);
+        authenticated = false;
     }
 
     private class AuthenticateSUAP extends AsyncTask<String, Void, Student> {
@@ -188,6 +213,7 @@ public class MainActivity extends FragmentActivity {
                 navigation.setVisibility(View.GONE);
                 inner_navigation.setVisibility(View.VISIBLE);
                 inner_navigation.setSelectedItemId(R.id.navigation_profile);
+                authenticated = true;
             } else {
                 Toast.makeText(MainActivity.this, "Matrícula ou senha inválida.", Toast.LENGTH_SHORT).show();
             }

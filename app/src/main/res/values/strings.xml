@@ -24,4 +24,7 @@
     <string name="student_course">Curso</string>
     <string name="student_campus">Campus</string>
     <string name="studant_status">Situação</string>
+
+    <string name="title_add_contact">Adicionar contato</string>
+    <string name="btn_find">Procurar</string>
 </resources>

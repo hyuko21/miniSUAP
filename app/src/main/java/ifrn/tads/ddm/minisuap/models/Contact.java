@@ -1,6 +1,8 @@
 package ifrn.tads.ddm.minisuap.models;
 
-public class Contact {
+import com.orm.SugarRecord;
+
+public class Contact extends SugarRecord {
 
     private String matricula;
     private String nome_usual;
@@ -34,14 +36,5 @@ public class Contact {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    @Override
-    public String toString() {
-        return (
-            matricula + "\n"
-            + nome_usual + "\n"
-            + email + "\n"
-        );
     }
 }
