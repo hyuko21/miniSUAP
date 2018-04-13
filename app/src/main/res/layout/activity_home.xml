@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:hint="@string/hint_password"
-                android:text="teste"
+                android:text="Taeralusfar21"
                 android:ems="21"/>
         </android.support.design.widget.TextInputLayout>
 

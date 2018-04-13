@@ -1,5 +1,6 @@
 package ifrn.tads.ddm.minisuap;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,6 +22,7 @@ import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 import ifrn.tads.ddm.minisuap.fragments.AboutFragment;
 import ifrn.tads.ddm.minisuap.fragments.ClassesFragment;
@@ -56,7 +58,6 @@ public class MainActivity extends FragmentActivity {
                 AboutFragment aboutFragment = new AboutFragment();
                 fragmentTransaction.replace(R.id.fragment_layout, aboutFragment, "about");
             }
-
             fragmentTransaction.commit();
             return true;
         }
@@ -93,6 +94,12 @@ public class MainActivity extends FragmentActivity {
                 fragmentTransaction.replace(R.id.fragment_layout, classesFragment, "classes");
             } else if (menuItemId == R.id.navigation_contacts) {
                 ContactsFragment contactsFragment = new ContactsFragment();
+
+                Bundle outState = new Bundle();
+                outState.putString("registration", registration);
+                outState.putString("password", password);
+                contactsFragment.setArguments(outState);
+
                 fragmentTransaction.replace(R.id.fragment_layout, contactsFragment, "contacts");
             }
 
@@ -130,6 +137,18 @@ public class MainActivity extends FragmentActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putBoolean("authenticated", authenticated);
+
+        if (authenticated) {
+            outState.putString("registration", student.getMatricula());
+            outState.putString("name", student.getNome());
+            outState.putString("course", student.getCurso());
+            outState.putString("campus", student.getCampus());
+            outState.putString("status", student.getSituacao());
+
+            outState.putString("registration", registration);
+            outState.putString("password", password);
+        }
+
         super.onSaveInstanceState(outState);
     }
 
@@ -138,9 +157,35 @@ public class MainActivity extends FragmentActivity {
         super.onRestoreInstanceState(savedInstanceState);
 
         if (savedInstanceState.getBoolean("authenticated")) {
+            student = new Student(
+                    savedInstanceState.getString("registration"),
+                    savedInstanceState.getString("name"),
+                    savedInstanceState.getString("course"),
+                    savedInstanceState.getString("campus"),
+                    savedInstanceState.getString("status")
+                    );
+
+            registration = savedInstanceState.getString("registration");
+            password = savedInstanceState.getString("password");
+
             navigation.setVisibility(View.GONE);
             inner_navigation.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 0 && resultCode == RESULT_OK) {
+            long contact_id = data.getLongExtra("contact_id", 0);
+            showContact(contact_id);
+        }
+    }
+
+    public void showContact(long contact_id) {
+        Student contact = Student.findById(Student.class, contact_id);
+        System.out.println(contact.getMatricula());
     }
 
     public void enter(View view) {
@@ -213,6 +258,7 @@ public class MainActivity extends FragmentActivity {
                 navigation.setVisibility(View.GONE);
                 inner_navigation.setVisibility(View.VISIBLE);
                 inner_navigation.setSelectedItemId(R.id.navigation_profile);
+
                 authenticated = true;
             } else {
                 Toast.makeText(MainActivity.this, "Matrícula ou senha inválida.", Toast.LENGTH_SHORT).show();

@@ -16,7 +16,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="MATRÍCULA"
-        style="@style/TextAppearance.AppCompat.Medium"/>
+        style="@style/TextAppearance.AppCompat.Small"/>
 
     <TextView
         android:id="@+id/tv_usual_name"
@@ -31,6 +31,7 @@
         android:gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="EMAIL"/>
+        android:text="@string/title_suaplivre"
+        style="@style/TextAppearance.AppCompat.Small"/>
 
 </TableLayout>
