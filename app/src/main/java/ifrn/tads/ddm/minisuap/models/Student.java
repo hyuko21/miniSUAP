@@ -11,7 +11,10 @@ public class Student extends SugarRecord {
     private String curso;
     private String campus;
     private String situacao;
-    private Student student;
+
+    public Student () {
+        super();
+    }
 
     public Student(String matricula, String nome, String curso, String campus, String situacao) {
         this.matricula = matricula;
@@ -61,16 +64,7 @@ public class Student extends SugarRecord {
         this.situacao = situacao;
     }
 
-    public Student getStudent() {
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
-    }
-
-    public List<Student> getContacts() {
-        String[] id = {"" + getId()};
-        return Student.find(Student.class, "student = ?", id);
+    public List<StudentContact> getContacts() {
+        return StudentContact.find(StudentContact.class, "student = ?", getId().toString());
     }
 }

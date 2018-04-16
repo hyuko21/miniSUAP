@@ -23,8 +23,10 @@
 
     <LinearLayout
         android:id="@+id/find_contact"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title"
         android:layout_marginTop="@dimen/table_row_contact_margin"
         android:gravity="center">
@@ -36,9 +38,10 @@
             android:layout_weight="1">
             <EditText
                 android:id="@+id/registration_input"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
+                android:ems="21"
                 android:hint="@string/hint_registration"/>
         </android.support.design.widget.TextInputLayout>
 
@@ -61,13 +64,14 @@
         android:visibility="visible">
 
         <TextView
-            android:id="@+id/result"
+            android:id="@+id/title_result"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/table_row_contact_margin"
             android:layout_marginBottom="@dimen/table_row_contact_margin"
             android:textAlignment="center"
             android:text="@string/title_result"
+            android:visibility="gone"
             style="@style/TextAppearance.AppCompat.Display1" />
 
         <TextView
@@ -91,13 +95,29 @@
             android:layout_height="wrap_content"
             style="@style/TextAppearance.AppCompat.Medium"/>
 
-        <Button
-            android:id="@+id/btn_add_contact"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/btn_add_contact"
-            android:onClick="addContact"/>
-
     </TableLayout>
+
+    <Button
+        android:id="@+id/btn_add_contact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_add_contact"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        app:layout_constraintTop_toBottomOf="@id/result_contact"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:visibility="gone"
+        android:onClick="addContact"/>
+
+    <Button
+        android:id="@+id/btn_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_back"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        app:layout_constraintTop_toBottomOf="@id/btn_add_contact"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:onClick="back"/>
 
 </android.support.constraint.ConstraintLayout>
